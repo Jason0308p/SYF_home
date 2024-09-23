@@ -3,7 +3,7 @@ import pandas as pd
 
 # 授權
 url = "C:/Users/syf/Desktop/code/data0923-a22f23dd44ce.json"
-gc = pygsheets.authorize(service_file=url)
+gc = pygsheets.authorize(service_file = url)
 
 # googel sheet 打開方式
 # gc.open(名稱或URL)
@@ -40,19 +40,22 @@ df_group = df_clean.groupby("週")["3.總訂單金額"].sum().reset_index()
 df_group["週訂單金額總和"] = df_group["3.總訂單金額"]
 df_sorted = df_group.sort_values(by = "週" , ascending = False)
 
-sht.del_worksheet(sht.worksheets()[3])
 # 打印出每個sheet的索引，每個工作表有各自的index，再進行刪除該index的工作表
 # print(sht.worksheets())
-# sht.del_worksheet(sht.worksheets()[3])
+#sht.del_worksheet(sht.worksheets()[3])
 
-
-new_sheet = sht.add_worksheet("週-總訂單金額",rows = 80 ,cols = 80 )
-new_sheet.set_dataframe(df_sorted,"A1")
+# 新增工作表，並且將想放的資料，貼到新工作表，從A1開始(如同複製貼上報表)
+#new_sheet = sht.add_worksheet("週-總訂單金額",rows = 80 ,cols = 80 )
+#new_sheet.set_dataframe(df_sorted,"A1")
 # print(new_sheet)
 
 
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 
+# 其他補充
 #result = df1.groupby('類別')['金額'].sum().reset_index()
 #result2 = df1.groupby('類別')['金額'].sum().transform("總金額")
 

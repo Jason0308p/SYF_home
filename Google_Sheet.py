@@ -34,10 +34,22 @@ df_clean = df.dropna(subset=['週'])
 #print(df[["週","日"]])
 
 # 先將金額轉成數字，並且去除逗號，例如十萬 100,000 改成100000
-df_clean["3.總訂單金額"] = df_clean["3.總訂單金額"].str.replace(",","").astype(float)
+df_clean["3.總訂單金額"] = df_clean["3.總訂單金額"].str.replace("," , "").astype(float)
+# 依照"週"做分類群，相同的週，把其 3.總訂單金額，進行sum加總，再reset_index到原始的欄位 3.總訂單金額
 df_group = df_clean.groupby("週")["3.總訂單金額"].sum().reset_index()
+df_group["週訂單金額總和"] = df_group["3.總訂單金額"]
+df_sorted = df_group.sort_values(by = "週" , ascending = False)
 
-#print(df_group)
+sht.del_worksheet(sht.worksheets()[3])
+# 打印出每個sheet的索引，每個工作表有各自的index，再進行刪除該index的工作表
+# print(sht.worksheets())
+# sht.del_worksheet(sht.worksheets()[3])
+
+
+new_sheet = sht.add_worksheet("週-總訂單金額",rows = 80 ,cols = 80 )
+new_sheet.set_dataframe(df_sorted,"A1")
+# print(new_sheet)
+
 
 
 

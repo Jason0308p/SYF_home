@@ -12,31 +12,36 @@ sht = gc.open_by_url("https://docs.google.com/spreadsheets/d/1z1eVTyEn3SLOyDeNqY
 # 讀取工作表
 sheets = sht.worksheets()
 sheet1, sheet2, sheet3 = sheets[0], sheets[1], sheets[2]
-# 讀取全部資料
-data = sheet1.get_all_values()
-
+# 讀取全部資料、部分資料
+#data = sheet1.get_all_values()
+data = sheet1.get_values("A1","F75")
 
 # 將資料轉成 dataframe，因為第二行開始才是數據，第一行為欄位名稱
 df = pd.DataFrame(data[1:],columns=data[0])
 #print(df.columns)
 
-# 清楚欄位前後空白
+# 清除欄位前後空白
 df.columns = df.columns.str.strip()
-#print(df.columns)
 
 # 先將日期列转换为 datetime
 df['日'] = pd.to_datetime(df['日'])
 
 # 轉換成 ISO 周数
 df['週'] = df['日'].dt.isocalendar().week
+df_clean = df.dropna(subset=['週'])
 
-# 输出结果
-print(df[['日', '週']])
+# 输出單列為[]，輸出多列為[[]]
+#print(df[["週","日"]])
+
+# 先將金額轉成數字，並且去除逗號，例如十萬 100,000 改成100000
+df_clean["3.總訂單金額"] = df_clean["3.總訂單金額"].str.replace(",","").astype(float)
+df_group = df_clean.groupby("週")["3.總訂單金額"].sum().reset_index()
+
+#print(df_group)
 
 
 
 #result = df1.groupby('類別')['金額'].sum().reset_index()
-
 #result2 = df1.groupby('類別')['金額'].sum().transform("總金額")
 
 # transform 可新增一個欄位，名稱為...

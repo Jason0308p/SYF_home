@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from numpy.f2py.crackfortran import endifs
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -23,7 +25,7 @@ def search_get_text(search_query):
 input_list = list()
 input_list = input("輸入四個編號: ")
 
-query = input_list.split()
+
 
 
 

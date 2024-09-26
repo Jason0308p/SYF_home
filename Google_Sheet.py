@@ -1,20 +1,29 @@
 import pygsheets
 import pandas as pd
 
+#---------------------------------------------------------------------------------------
 # 授權
+
 url = "C:/Users/syf/Desktop/code/data0923-a22f23dd44ce.json"
 gc = pygsheets.authorize(service_file = url)
 
-# googel sheet 打開方式
+#---------------------------------------------------------------------------------------
+# 讀取
+
+# google sheet 打開方式
 # gc.open(名稱或URL)
+# 每日訂單副本
 sht = gc.open_by_url("https://docs.google.com/spreadsheets/d/1z1eVTyEn3SLOyDeNqY2suDaBtwkZ9Wf2k55vHTVf36g/edit")
 
 # 讀取工作表
 sheets = sht.worksheets()
 sheet1, sheet2, sheet3 = sheets[0], sheets[1], sheets[2]
 # 讀取全部資料、部分資料
-#data = sheet1.get_all_values()
+# data = sheet1.get_all_values()
 data = sheet1.get_values("A1","F75")
+
+#---------------------------------------------------------------------------------------
+# 轉成 dataframe 並加工
 
 # 將資料轉成 dataframe，因為第二行開始才是數據，第一行為欄位名稱
 df = pd.DataFrame(data[1:],columns=data[0])
@@ -40,6 +49,17 @@ df_group = df_clean.groupby("週")["3.總訂單金額"].sum().reset_index()
 df_group["週訂單金額總和"] = df_group["3.總訂單金額"]
 df_sorted = df_group.sort_values(by = "週" , ascending = False)
 
+#---------------------------------------------------------------------------------------
+# 新增欄位
+
+add_row = sht.worksheet('title','test')
+#add_row.append_table(['2024-09-20',115160,115160,45590,45590],start='A1',dimension='ROWS',overwrite=False)
+
+# 新增 row data
+# 但無法代入公式，因此需另外計算好再帶入
+add_row.insert_rows(1,2,values = [['2024-09-25', 26500, 26500, 26500,1,1],['2024-09-24', 26500, 26500, 26500,1,1]], inherit=False)
+
+
 # 打印出每個sheet的索引，每個工作表有各自的index，再進行刪除該index的工作表
 # print(sht.worksheets())
 #sht.del_worksheet(sht.worksheets()[3])
@@ -49,11 +69,9 @@ df_sorted = df_group.sort_values(by = "週" , ascending = False)
 #new_sheet.set_dataframe(df_sorted,"A1")
 # print(new_sheet)
 
-
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
-
 
 # 其他補充
 #result = df1.groupby('類別')['金額'].sum().reset_index()
@@ -78,3 +96,6 @@ df_sorted = df_group.sort_values(by = "週" , ascending = False)
 # 以dataframe形式寫入資料
 #df1 = pd.DataFrame({'a': [1, 2], 'b': [3, 4]})
 #wks.set_dataframe(df1, 'A2', copy_index=True, nan='')
+
+#new_sheet = sht.add_worksheet(title='test',rows=20,cols=20)
+

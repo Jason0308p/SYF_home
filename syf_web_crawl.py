@@ -34,6 +34,7 @@ def search_get_text(search_query):
     finally:
             driver.quit()
 
+
 input_list = input("輸入編號 (用逗號分隔): ")
 
 search_queries = [query.strip() for query in input_list.split(",") if query.strip()]

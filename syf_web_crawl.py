@@ -13,10 +13,10 @@ def search_get_text(search_query):
     try:
             driver.get(url)
 
-
             search_box = driver.find_element(By.ID, "header-search")
+
             search_box.send_keys(search_query)
-            time.sleep(0.9)
+            time.sleep(0.6)
 
             preview =  driver.find_element(By.XPATH,"//div[@class='predictive-result__info flex-auto']")
             preview.click()

@@ -1,6 +1,5 @@
 import pygsheets
 import pandas as pd
-
 #---------------------------------------------------------------------------------------
 # 授權
 
@@ -12,7 +11,7 @@ gc = pygsheets.authorize(service_file = url)
 
 # google sheet 打開方式
 # gc.open(名稱或URL)
-# 每日訂單副本
+# 宜搭每日訂單_副本
 sht = gc.open_by_url("https://docs.google.com/spreadsheets/d/1z1eVTyEn3SLOyDeNqY2suDaBtwkZ9Wf2k55vHTVf36g/edit")
 
 # 讀取工作表
@@ -27,12 +26,12 @@ data = sheet1.get_values("A1","F75")
 
 # 將資料轉成 dataframe，因為第二行開始才是數據，第一行為欄位名稱
 df = pd.DataFrame(data[1:],columns=data[0])
-#print(df.columns)
+#print(df)
 
 # 清除欄位前後空白
 df.columns = df.columns.str.strip()
 
-# 先將日期列转换为 datetime
+# 先將日期欄，转换为日期格式
 df['日'] = pd.to_datetime(df['日'])
 
 # 轉換成 ISO 周数
@@ -43,7 +42,9 @@ df_clean = df.dropna(subset=['週'])
 #print(df[["週","日"]])
 
 # 先將金額轉成數字，並且去除逗號，例如十萬 100,000 改成100000
-df_clean["3.總訂單金額"] = df_clean["3.總訂單金額"].str.replace("," , "").astype(float)
+# str是一個屬性，，可提供pandas series中的每個字串進行訪問，replace則是字串的一個方法
+df_clean["3.總訂單金額"] = df_clean["3.總訂單金額"].str.replace("," , "").astype(int)
+
 # 依照"週"做分類群，相同的週，把其 3.總訂單金額，進行sum加總，再reset_index到原始的欄位 3.總訂單金額
 df_group = df_clean.groupby("週")["3.總訂單金額"].sum().reset_index()
 df_group["週訂單金額總和"] = df_group["3.總訂單金額"]
@@ -53,11 +54,12 @@ df_sorted = df_group.sort_values(by = "週" , ascending = False)
 # 新增欄位
 
 add_row = sht.worksheet('title','test')
+# append 會把資料新增到整個表的最下面一個資料
 #add_row.append_table(['2024-09-20',115160,115160,45590,45590],start='A1',dimension='ROWS',overwrite=False)
 
 # 新增 row data
-# 但無法代入公式，因此需另外計算好再帶入
-add_row.insert_rows(1,2,values = [['2024-09-25', 26500, 26500, 26500,1,1],['2024-09-24', 26500, 26500, 26500,1,1]], inherit=False)
+# 但此新增無法代入公式，因此需另外計算好再帶入
+add_row.insert_rows(1,2,values = [['2024-09-25', 26500, 26500, 26500],['2024-09-24', 222, 111, 1111]], inherit=False)
 
 
 # 打印出每個sheet的索引，每個工作表有各自的index，再進行刪除該index的工作表

@@ -45,4 +45,4 @@ sheets[2].set_dataframe(df_week, (1, 1))
 # add_row.insert_rows(1,1,values=[],inherit=False)
 
 
-
+# wks.update_value('C2', '=SUM(B2:B10)')

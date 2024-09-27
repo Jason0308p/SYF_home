@@ -1,0 +1,13 @@
+# .gitlab-ci.yml
+
+stages:
+  - test
+
+# 定義測試階段的任務
+test-job:
+  stage: test
+  image: python:3.9   # 使用 Python 3.9 作為運行環境
+  before_script:
+    - pip install pytest  # 安裝測試框架 pytest
+  script:
+    - pytest test_script.py  # 執行測試腳本

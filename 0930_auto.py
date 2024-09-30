@@ -1,3 +1,5 @@
-# example_script.py
-def add_numbers(a, b):
-    return a + b
+def add_numbers(c, d):
+    return c + d
+
+result = add_numbers(5, 10)
+print(f"The result is: {result}")

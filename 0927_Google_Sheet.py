@@ -46,3 +46,7 @@ sheets[2].set_dataframe(df_week, (1, 1))
 
 
 # wks.update_value('C2', '=SUM(B2:B10)')
+
+#在第一個row 插入數據
+# test_data = [40,99999]
+# sheets[2].insert_rows(row=1,number=1,values=test_data)

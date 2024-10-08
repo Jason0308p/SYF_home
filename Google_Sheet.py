@@ -101,3 +101,10 @@ add_row.insert_rows(1,2,values = [['2024-09-25', 26500, 26500, 26500],['2024-09-
 
 #new_sheet = sht.add_worksheet(title='test',rows=20,cols=20)
 
+
+# 在第一行插入数据
+#wks.insert_rows(row=1, number=1, values=new_row_data)
+
+#在第一個row 插入數據
+# test_data = [40,99999]
+# sheets[2].insert_rows(row=1,number=1,values=test_data)

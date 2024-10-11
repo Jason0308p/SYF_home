@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 import time
 import pygsheets
 import pandas as pd
-import numpy as np
 
 
 def search_and_scroll(search_query):

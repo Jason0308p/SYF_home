@@ -56,6 +56,7 @@ def search_and_scroll(search_query):
 def batch_search(search_queries):
     results = []  # 用于存储所有查询的结果
 
+
     for index, query in enumerate(search_queries, start=1):
         print(f"\n----- 开始查询第 {index} 个关键字: {query} -----\n")
         syf_data,sponsor_ad_count,page_count = search_and_scroll(query)
@@ -78,10 +79,12 @@ def batch_search(search_queries):
             results.append([
                 None,
                 sponsor_ad_count,
-                0,
+                999,
                 None
             ])
 
+        if index >=50:
+            break
     return results  # 返回包含子列表的列表，每个子列表表示一个查询的结果
 
 
@@ -92,7 +95,7 @@ sheet_url = "https://docs.google.com/spreadsheets/d/18H9Qh64jqWMRNnv_-tLj85mkUCY
 gc = pygsheets.authorize(service_file=url)
 sheet_name = gc.open_by_url(sheet_url)
 sheets = sheet_name.worksheets()
-query_data = sheets[0].get_values("A2", "A10")
+query_data = sheets[0].get_values("A2", "A50")
 queries = [row[0] for row in query_data]
 
 
@@ -103,8 +106,8 @@ if __name__ == "__main__":
 
     # 重要!!! 把dataframe資料為 nan 轉換成 None，因為google sheet 只讀得懂None
     #df = df.where(pd.notnull(df),None)
-    print("DataFrame before converting to list:")
-    print(df)
+    # print("DataFrame before converting to list:")
+    # print(df)
 
 
     data_with_headers = [df.columns.tolist()] + df.values.tolist()
